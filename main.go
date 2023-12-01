@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"sort"
@@ -42,8 +41,6 @@ var (
 
 	// deps is a map of all deps that have been seen.
 	deps = make(map[string]struct{})
-
-	stdout io.Writer = os.Stdout
 )
 
 func run() error {
@@ -97,11 +94,13 @@ func imports(pkg *packages.Package, module string, stdlibDepth, modsDepth int) e
 		}
 		deps[fmt.Sprintf("%s->%s", pkg.PkgPath, imp.PkgPath)] = struct{}{}
 
+		output := fmt.Sprintf("%s %s\n", pkg.PkgPath, imp.PkgPath)
 		if trim {
-			pkg.PkgPath = strings.TrimPrefix(pkg.PkgPath, module+"/")
-			imp.PkgPath = strings.TrimPrefix(imp.PkgPath, module+"/")
+			output = fmt.Sprintf("%s %s\n",
+				strings.TrimPrefix(pkg.PkgPath, module+"/"),
+				strings.TrimPrefix(imp.PkgPath, module+"/"))
 		}
-		fmt.Fprintf(stdout, "%s %s\n", pkg.PkgPath, imp.PkgPath)
+		fmt.Print(output)
 
 		var err error
 		if isStdlib {
