@@ -37,4 +37,5 @@ $ gopkgraph -mods=1 | grep " \github.com/user" | modgraphviz | dot -Tpng -o pkgs
 | `-pkg` | Path to the package. Omit this flag to target the current directory. (optional) |
 | `-mods` | Max depth for packages from other modules. (optional) |
 | `-stdlib` | Max depth for packages from the stdlib. (optional) |
+| `-trim` | Trim module prefix. (optional) |
 | `-help` | Print flags. (optional) |
