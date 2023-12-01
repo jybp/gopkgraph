@@ -7,18 +7,20 @@ import (
 	"log"
 	"os"
 	"sort"
+	"strings"
 
 	"golang.org/x/tools/go/packages"
 )
 
 var (
-	help               bool
+	help, trim         bool
 	maxMods, maxStdlib int
 	pkg                string
 )
 
 func main() {
 	flag.StringVar(&pkg, "pkg", "", "Path to the package. Omit this flag to target the current directory.")
+	flag.BoolVar(&trim, "trim", true, "Trim module prefix.")
 	flag.IntVar(&maxMods, "mods", 0, "Max depth for packages from other modules.")
 	flag.IntVar(&maxStdlib, "stdlib", 0, "Max depth for packages from the stdlib.")
 	flag.BoolVar(&help, "h", false, "Help.")
@@ -95,6 +97,10 @@ func imports(pkg *packages.Package, module string, stdlibDepth, modsDepth int) e
 		}
 		deps[fmt.Sprintf("%s->%s", pkg.PkgPath, imp.PkgPath)] = struct{}{}
 
+		if trim {
+			pkg.PkgPath = strings.TrimPrefix(pkg.PkgPath, module+"/")
+			imp.PkgPath = strings.TrimPrefix(imp.PkgPath, module+"/")
+		}
 		fmt.Fprintf(stdout, "%s %s\n", pkg.PkgPath, imp.PkgPath)
 
 		var err error
