@@ -5,7 +5,7 @@
 A simple tool to generate a dependency graph of Golang packages. 
 The output has the same format as the [go mod graph](https://go.dev/ref/mod#go-mod-graph) command. It can be used alongside tools that support that format such as [modgraphviz](https://pkg.go.dev/golang.org/x/exp/cmd/modgraphviz).
 
-![gopkgraph](docs/docker.png?raw=true)
+![imports dependency tree](docs/compose.png?raw=true)
 
 # Installation
 
